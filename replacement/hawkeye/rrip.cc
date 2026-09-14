@@ -44,14 +44,14 @@ std::size_t find_victim(std::vector<int>& rrpv){
         if(rrpv[i] == MAX_RRPV) return i;
     }
 
-    // no averse line, so evict the oldest cache-friendly one. 
-    std::size_t victim = 0;
-    int highest = -1;
+    // no line at 7, so age the set until the oldest reaches 7 and evict that
+    int highest = *std::max_element(rrpv.begin(), rrpv.end());
+    int shift = MAX_RRPV - highest;
+    for(auto& v : rrpv) v += shift;
+
     for(std::size_t i = 0; i < rrpv.size(); i++){
-        if(rrpv[i] >= highest){
-            highest = rrpv[i];
-            victim = i;
-        }
+        if(rrpv[i] == MAX_RRPV) return i;
     }
-    return victim;
+
+    return 0;
 }
